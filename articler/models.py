@@ -1,12 +1,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from main import db
+from database import db
 
 
 class User(db.Model):
     __tablename__ = 'users'
 
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30))
     password_hash = db.Column(db.String(1000))
 
@@ -17,7 +17,7 @@ class User(db.Model):
         self.password_hash = self._set_password(password)
 
     def __iter__(self):
-        yield 'id', self.user_id
+        yield 'id', str(self.id)
         yield 'username', self.username
 
     def _set_password(self, password):
@@ -42,7 +42,7 @@ class Article(db.Model):
     timestamp = db.Column(db.DateTime())
     text = db.Column(db.Text)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __init__(self, timestamp, text, user):
         self.timestamp = timestamp
