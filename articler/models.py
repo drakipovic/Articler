@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import db
@@ -39,20 +41,25 @@ class Article(db.Model):
     __tablename__ = 'articles'
 
     article_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
     timestamp = db.Column(db.DateTime())
     text = db.Column(db.Text)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, timestamp, text, user):
-        self.timestamp = timestamp
+    def __init__(self, name, text, user):
+        self.timestamp = datetime.utcnow()
         self.text = text
-        self.user_id = user.user_id
+        self.user_id = user.id
+        self.name = name
 
     def __iter__(self):
         yield 'id', self.article_id
+        yield 'name', self.name
         yield 'text', self.text
         yield 'user_id', self.user_id
+        yield 'date', datetime.strftime(self.timestamp, "%m/%d/%Y")
+        yield 'username', User.query.get(self.user_id).username
     
     def save(self):
         db.session.add(self)

@@ -16,12 +16,12 @@ def get_current_user():
 
 @app.route('/users')
 def get_users():
-    return session['logged_in']
+    return render_template('users.html')
 
 
 @app.route('/')
 @app.route('/articles')
-def articles():
+def get_articles():
     return render_template('articles.html')
 
 
@@ -37,3 +37,9 @@ def do_login():
     
     else:
         return jsonify({"error": "Bad credentials"})
+
+    
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('get_articles'))

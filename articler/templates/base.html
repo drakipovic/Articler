@@ -4,25 +4,29 @@
 <title>Articler</title>
 
 <head>
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+
+    <script src="https://use.fontawesome.com/859a20a3bb.js"></script>
     <link type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link type="text/css" href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/static/js/tether.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/mdb.min.js"></script>
-    <script src="/static/js/tether.min.js"></script>
-
-
+    
 </head>
 
 
 <body>
 <!--Navbar-->
-    <nav class="navbar navbar-dark teal">
+    <nav class="navbar navbar-dark teal navbar-fixed-top">
 
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand">Articler</a>
+                <a class="navbar-brand" style="color: white">Articler</a>
             </div>
 
             <!--Collapse content-->
@@ -34,13 +38,69 @@
                         <input class="form-control" type="password" id="password" placeholder="Password">
                         <button type="submit" onclick="loginUser()"" class="btn btn-default">Login</button>
                     </form>
-                    <li class="nav-item" id="user" style="float: right"></li>
+                </ul>
+                <ul class="nav navbar-nav nav-flex-icons" id="user" style="display: none">
+                    <li class="nav-item">
+                        <a class="nav-link" id="name"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="my_articles">My Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-target="#myModal" data-toggle="modal"><i class="fa fa-plus-square"></i> Add Article</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="fa fa-sign-out"></i>Logout</a>
+                    </li>
+                  
+                    
+                </ul>
             </div>
 
         </div>
 
     </nav>
+    <div class="container">
+        <div class="row">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
 
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add Article</h4>
+                </div>
+                <!--Body-->
+                <div class="modal-body">
+                     <div class="md-form">
+                        <input type="text" id="article_name" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="md-form">
+                        <textarea type="text" id="article_text" class="md-textarea" rows="10" placeholder="Text"></textarea>
+                    </div>
+                </div>
+                <!--Footer-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveArticle()">Save changes</button>
+                </div>
+            </div>
+        <!--/.Content-->
+        </div>
+    </div>
+
+
+    {% block page_js %}
+        
+    {% endblock %}
     <script type="text/javascript" src="/static/js/custom.js"></script>
 </body>
 </html>

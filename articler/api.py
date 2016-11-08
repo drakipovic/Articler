@@ -4,11 +4,11 @@ from flask import jsonify, request
 from flask_restful import Resource
 from flask_jwt import jwt_required
 
-from models import User
+from models import User, Article
 
 
 class Users(Resource):
-    decorators = [jwt_required()]
+    #decorators = [jwt_required()]
 
     def get(self):
         users = User.query.all()
@@ -38,13 +38,36 @@ class Users(Resource):
 class Articles(Resource):
 
     def get(self):
-        pass
+        articles = Article.query.all()
+
+        articles = [dict(article) for article in articles]
+
+        return jsonify({"articles": articles})
     
     def post(self):
-        pass
+        data = request.get_json()
+        
+        user = User.query.get(data["user_id"]) 
+        article = Article(data["name"], data["text"], user)
+        article.save()
+
+        return jsonify({"success": True})
+
 
     def put(self):
         pass
 
     def delete(self):
         pass
+
+
+class ArticleResource(Resource):
+    pass
+
+
+class UserArticle(Resource):
+    pass
+
+
+class UserArticles(Resource):
+    pass
