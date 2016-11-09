@@ -19,7 +19,7 @@ function append_users(data){
         username = users[i]["username"];
         user_id = users[i]["id"];
 
-        $('.list-group').append('<a href="/users/' + user_id + '/articles" class="list-group-item">' + username + '</a>');
+        $('.list-group').append('<a href="/user/' + user_id + '/articles" class="list-group-item">' + username + '</a>');
 
     }
 }

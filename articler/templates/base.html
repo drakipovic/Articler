@@ -26,7 +26,7 @@
 
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" style="color: white">Articler</a>
+                <a class="navbar-brand"><img class="responsive" src="/static/img/logo.png"/></a>
             </div>
 
             <!--Collapse content-->
@@ -80,7 +80,7 @@
                 </div>
                 <!--Body-->
                 <div class="modal-body">
-                     <div class="md-form">
+                    <div class="md-form">
                         <input type="text" id="article_name" class="form-control" placeholder="Name">
                     </div>
                     <div class="md-form">
@@ -98,9 +98,9 @@
     </div>
 
 
-    {% block page_js %}
-        
-    {% endblock %}
+ 
     <script type="text/javascript" src="/static/js/custom.js"></script>
+    {% block page_js %}    
+    {% endblock %}
 </body>
 </html>

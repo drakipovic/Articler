@@ -1,5 +1,7 @@
 var user = null;
 var id = null;
+var token = null;
+
 get_current_user();
 
 function callback(data){
@@ -13,14 +15,14 @@ function callback(data){
     }
     else{
         document.getElementById('name').innerHTML = "Hello " + user;
-        $("#my_articles").attr('href', '/user/' + user + "/articles");
+        $("#my_articles").attr('href', '/user/' + id + "/articles");
         $("#user").show();
     }
 }
 
 
 function get_current_user(){
-    $.ajax({
+    return $.ajax({
         url: "/api/current_user",
         success: function(data){
             callback(data);
@@ -46,8 +48,8 @@ function loginUser(){
         dataType: "json",
         contentType: "application/json"
     });
-
 }
+
 
 function saveArticle(){
     var name = $('#article_name').val();
@@ -65,4 +67,20 @@ function saveArticle(){
         dataType: "json",
         contentType: "application/json"
     });
+}
+
+var username = null;
+function get_username(user_id){
+     $.ajax({
+        url: "/api/user/" + user_id,
+        success: function(data){
+            save_username(data);
+        }.bind(this),
+        contentType: "application/json"
+    });
+
+}
+
+function save_username(data){
+    username = data["username"];
 }

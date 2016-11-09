@@ -1,21 +1,38 @@
 import json
+from datetime import datetime
 
-from flask import jsonify, request
+from flask import jsonify, request, session
 from flask_restful import Resource
 from flask_jwt import jwt_required
 
 from models import User, Article
+from main import auth
 
+
+def check_user(user):
+    if user.username != session['logged_in']:
+        return {"error": "You don't have this kind of permission"}
+
+    return True
+
+
+class UserResource(Resource):
+    
+    def get(self, user_id):
+        user = User.query.get(user_id)
+
+        return jsonify(dict(user))
+        
 
 class Users(Resource):
-    #decorators = [jwt_required()]
-
+    
     def get(self):
         users = User.query.all()
         
         users = [dict(user) for user in users]
 
         return jsonify({'users': users})
+    
 
     def post(self):
         username = request.json.get('username')
@@ -25,11 +42,28 @@ class Users(Resource):
         user.save()
 
         return jsonify({"success": True, "user": dict(user)})
+    
+    def put(self):
+        data = request.get_json()
+        
+        user = User.query.get(data["user_id"])
+        resp = check_user(user)
+        if resp != True:
+            return jsonify(resp)
+        
+        user.username = data["username"]
+        user.save()
+
+        return jsonify({"success": True})
 
     def delete(self):
         username = request.json.get('username')
 
         user = User.query.filter_by(username=username).first()
+        resp = check_user(user)
+        if resp != True:
+            return jsonify(resp)
+
         user.delete()
 
         return jsonify({"success": True})
@@ -43,7 +77,7 @@ class Articles(Resource):
         articles = [dict(article) for article in articles]
 
         return jsonify({"articles": articles})
-    
+
     def post(self):
         data = request.get_json()
         
@@ -54,20 +88,46 @@ class Articles(Resource):
         return jsonify({"success": True})
 
 
-    def put(self):
-        pass
-
-    def delete(self):
-        pass
-
-
 class ArticleResource(Resource):
-    pass
+    
+    def get(self, article_id):
+        article = Article.query.get(article_id)
 
+        return jsonify({"article": dict(article)})
 
-class UserArticle(Resource):
-    pass
+    def put(self, article_id):
+        data = request.get_json()
+        article = Article.query.get(article_id)
+        
+        user = User.query.get(article.user_id)
+        resp = check_user(user)
+        if resp != True:
+            return jsonify(resp)
+
+        article.name = data["name"]
+        article.text = data["text"]
+        article.save()
+
+        return jsonify({"article": dict(article)})
+    
+    def delete(self, article_id):
+        article = Article.query.get(article_id)
+
+        user = User.query.get(article.user_id)
+        resp = check_user(user)
+        if resp != True:
+            return jsonify(resp)
+            
+        article.delete()
+
+        return jsonify({"success": True})
 
 
 class UserArticles(Resource):
-    pass
+
+    def get(self, user_id):
+        articles = Article.query.filter_by(user_id=user_id).all()
+
+        articles = [dict(article) for article in articles]
+
+        return jsonify({"articles": articles})

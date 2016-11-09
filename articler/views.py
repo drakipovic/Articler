@@ -14,10 +14,20 @@ def get_current_user():
     return jsonify({"error": "no user"})
 
 
+@app.route('/user/<int:user_id>/articles')
+def user_articles(user_id=None):
+    return render_template('user_articles.html')
+
+
 @app.route('/users')
 def get_users():
     return render_template('users.html')
 
+
+@app.route('/article/<int:article_id>')
+def get_article(article_id=None):
+    return render_template('article.html')
+    
 
 @app.route('/')
 @app.route('/articles')

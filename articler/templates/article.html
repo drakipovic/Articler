@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-lg-6">
+        <h1 id="article_name"></h1>
+    </div>
+    <div class="col-md-6 col-lg-6">
+        <h2 id="buttons" style="display:none; float: right">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editModal">Edit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteArticle()">Delete</button>
+        </h2>
+    </div>
+    <hr>
+</div>
+
+<div class="jumbotron">
+    <h4 id="text"></h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div id="author"></div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div id="date" style="float: right"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalTitle">Edit Article</h4>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="md-form">
+                    <input type="text" id="articleName" class="form-control" placeholder="Name">
+                </div>
+                <div class="md-form">
+                    <textarea type="text" id="article_text" class="md-textarea" rows="10" placeholder="Text"></textarea>
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="editArticle()">Save changes</button>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+    <script src="/static/js/article.js"></script>
+{% endblock %}

@@ -20,10 +20,11 @@ function append_articles(data){
         var text = articles[i]["text"];
         var username = articles[i]["username"];
         var timestamp = articles[i]["date"];
+        var article_id = articles[i]["id"];
 
         $(".row").append('<div class="col-md-6 col-lg-6"> \
                             <div class="card"> \
-                                <h2 class="card-header card-primary white-text">' + name + '</h2> \
+                                <a href=/article/' + article_id + '><h2 class="card-header card-primary white-text">' + name + '</h2></a> \
                                     <div class="card-block"> \
                                         <p class="card-text">' + text + '</p> \
                                     </div> \
@@ -35,4 +36,5 @@ function append_articles(data){
                         );
     }
 }
+
 
