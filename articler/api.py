@@ -10,7 +10,7 @@ from main import auth
 
 
 def check_user(user):
-    if user.username != session['logged_in']:
+    if user.username != session['logged_in'].split(':')[0]:
         return {"error": "You don't have this kind of permission"}
 
     return True
@@ -33,7 +33,6 @@ class Users(Resource):
 
         return jsonify({'users': users})
     
-
     def post(self):
         username = request.json.get('username')
         password = request.json.get('password')
@@ -43,6 +42,7 @@ class Users(Resource):
 
         return jsonify({"success": True, "user": dict(user)})
     
+    @auth.login_required
     def put(self):
         data = request.get_json()
         
@@ -55,7 +55,8 @@ class Users(Resource):
         user.save()
 
         return jsonify({"success": True})
-
+    
+    @auth.login_required
     def delete(self):
         username = request.json.get('username')
 
@@ -78,6 +79,7 @@ class Articles(Resource):
 
         return jsonify({"articles": articles})
 
+    @auth.login_required
     def post(self):
         data = request.get_json()
         
@@ -95,8 +97,10 @@ class ArticleResource(Resource):
 
         return jsonify({"article": dict(article)})
 
+    @auth.login_required
     def put(self, article_id):
         data = request.get_json()
+        
         article = Article.query.get(article_id)
         
         user = User.query.get(article.user_id)
@@ -107,9 +111,10 @@ class ArticleResource(Resource):
         article.name = data["name"]
         article.text = data["text"]
         article.save()
-
+        
         return jsonify({"article": dict(article)})
     
+    @auth.login_required
     def delete(self, article_id):
         article = Article.query.get(article_id)
 

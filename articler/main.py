@@ -1,4 +1,6 @@
 from datetime import timedelta
+import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import Flask
 from flask_restful import Api
@@ -22,3 +24,7 @@ def verify_password(username, password):
     return True
 
 api = Api(app, prefix='/api')
+
+handler = RotatingFileHandler('access.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)

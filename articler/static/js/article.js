@@ -36,6 +36,8 @@ function deleteArticle(){
     $.ajax({
         type: "DELETE",
         url: "/api/article/" + article_id,
+        username: user,
+        password: pass,
         success: function(data){
             window.location.replace('/');
         }.bind(this),
@@ -53,11 +55,12 @@ function editArticle(){
     $.ajax({
         type: "PUT",
         url: "/api/article/" + article_id,
+        username: user,
+        password: pass,
         data: JSON.stringify(data),
         success: function(data){
             $("#editModal").modal('hide');
             article = data["article"];
-            console.debug(article);
             document.getElementById('article_name').innerHTML = article["name"];
             document.getElementById('text').innerHTML = article["text"];
         }.bind(this),
