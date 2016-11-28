@@ -59,7 +59,7 @@ function saveArticle(){
     var name = $('#article_name').val();
     var text = $('#article_text').val();
 
-    data = {"name": name, "text": text, "user_id": id};
+    data = {"name": name, "text": text, "username": user};
     $.ajax({
         type: "POST",
         url: "/api/articles",

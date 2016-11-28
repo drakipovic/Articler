@@ -4,13 +4,14 @@ import articler.views
 from articler.main import app, api
 from articler.database import db
 from articler.models import User, Article
-from articler.api import Users, Articles,  UserArticles, ArticleResource, UserResource
+from articler.api import Users, Articles,  UserArticles, ArticleResource
 
-api.add_resource(Users, '/users')
-api.add_resource(Articles, '/articles')
-api.add_resource(UserArticles, '/user/<int:user_id>/articles')
-api.add_resource(ArticleResource, '/article/<int:article_id>')
-api.add_resource(UserResource, '/user/<int:user_id>')
+
+api.add_resource(Users, '/api/users')
+api.add_resource(Articles, '/api/articles')
+api.add_resource(UserArticles, '/api/user/<int:user_id>/articles')
+api.add_resource(ArticleResource, '/api/article/<int:article_id>')
+
 
 db.init_app(app)
 if not os.path.exists('articler/dev.db'):

@@ -3,8 +3,9 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 from flask import Flask
-from flask_restful import Api
+from flask.ext.restful_swagger_2 import Api
 from flask.ext.httpauth import HTTPBasicAuth
+from flask_cors import CORS, cross_origin
 
 from models import User
 
@@ -23,7 +24,8 @@ def verify_password(username, password):
 
     return True
 
-api = Api(app, prefix='/api')
+api = Api(app, api_version='1', api_spec_url='/api/docs', description='API endpoints documentation')
+CORS(app)
 
 handler = RotatingFileHandler('access.log', maxBytes=10000, backupCount=1)
 handler.setLevel(logging.INFO)
