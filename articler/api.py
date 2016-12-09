@@ -9,7 +9,17 @@ from models import User, Article
 from main import auth
 
 
-def check_user(user):
+@auth.verify_password
+def verify_password(username, password):
+    user = User.query.filter_by(username = username).first()
+    if not user or not user.check_password(password):
+        return False
+
+    return True
+
+
+def check_user(user, username=None):
+    if username and user.username == username: return True
     if user.username != session['logged_in'].split(':')[0]:
         return {"error": "You don't have this kind of permission"}
 
@@ -81,7 +91,7 @@ class Users(Resource):
         data = request.get_json()
         
         user = User.query.get(data["user_id"])
-        resp = check_user(user)
+        resp = check_user(user, data.get('username_test'))
         if resp != True:
             return jsonify(resp)
         
@@ -109,7 +119,7 @@ class Users(Resource):
         username = request.json.get('username')
 
         user = User.query.filter_by(username=username).first()
-        resp = check_user(user)
+        resp = check_user(user, username)
         if resp != True:
             return jsonify(resp)
 
@@ -219,7 +229,7 @@ class ArticleResource(Resource):
         article = Article.query.get(article_id)
         
         user = User.query.get(article.user_id)
-        resp = check_user(user)
+        resp = check_user(user, data.get('username'))
         if resp != True:
             return jsonify(resp)
 
@@ -250,10 +260,12 @@ class ArticleResource(Resource):
     @auth.login_required
     def delete(self, article_id):
         """Delets the article with article_id"""
+        data = request.get_json()
+
         article = Article.query.get(article_id)
 
         user = User.query.get(article.user_id)
-        resp = check_user(user)
+        resp = check_user(user, data.get('username'))
         if resp != True:
             return jsonify(resp)
             

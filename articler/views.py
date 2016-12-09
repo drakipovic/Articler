@@ -1,7 +1,7 @@
 from flask import jsonify, request, render_template, session, redirect, url_for, g
 
-from main import app
 from models import User
+from main import app
 
 
 @app.route('/api/current_user')

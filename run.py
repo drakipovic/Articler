@@ -13,9 +13,4 @@ api.add_resource(UserArticles, '/api/user/<int:user_id>/articles')
 api.add_resource(ArticleResource, '/api/article/<int:article_id>')
 
 
-db.init_app(app)
-if not os.path.exists('articler/dev.db'):
-    with app.app_context():
-        db.create_all()
-
 app.run(host='0.0.0.0', debug=True)
